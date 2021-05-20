@@ -7,7 +7,7 @@ const MainStack = createStackNavigator();
 
 const MainStackNavigator = () => {
   return (
-    <MainStack.Navigator>
+    <MainStack.Navigator headerMode="none">
       <MainStack.Screen name="Tabs" component={MainTabNavigator} />
     </MainStack.Navigator>
   );
