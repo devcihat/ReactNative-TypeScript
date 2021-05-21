@@ -1,22 +1,36 @@
 import React, { useState } from "react";
 import { Box, Text } from "react-native-design-utility";
-import { FlatList, StyleSheet, TextInput,Image } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  TextInput,
+  ActivityIndicator,
+} from "react-native";
 import { useLazyQuery } from "@apollo/client";
-import { SearchQuery, SearchQueryVariables, SearchQuery_search } from '../../types/qraphql';
+import {
+  SearchQuery,
+  SearchQueryVariables,
+  SearchQuery_search,
+} from "../../types/qraphql";
 import searchQuery from "../../graphql/query/searchQuery";
+import SearchEmpty from "./SearchEmpty"
+import SearchTile from "./SearchTile";
+
+
+
 
 const SearchScreen = () => {
-  const [term, setTerm] = useState<string>('')
+  const [term, setTerm] = useState<string>("");
   const [search, { data, loading, error }] =
     useLazyQuery<SearchQuery, SearchQueryVariables>(searchQuery);
 
-    const onSearch = async () => {
-      try {
-        await search({variables: {term}})
-      } catch (error) {
-        console.log('error',error)
-      }
+  const onSearch = async () => {
+    try {
+      await search({ variables: { term } });
+    } catch (error) {
+      console.log("error", error);
     }
+  };
 
   return (
     <Box f={1} bg="white">
@@ -31,29 +45,41 @@ const SearchScreen = () => {
           value={term}
         />
       </Box>
-      <FlatList<SearchQuery_search>
-        keyboardShouldPersistTaps="never"
-        style={styles.list}
-        data={data?.search ?? []}
-        renderItem={({item}) => (
-          <Box h={90} dir="row" align="center" px="sm">
-            <Box h={70} w={70} bg="blue" radius={10} mr={10}>
-              {item.thumbnail && <Image style={styles.img} source={{ uri:item.thumbnail }} /> } 
-             </Box>
 
-            <Box>
-              <Text bold>{item.podcastName}</Text>
-              <Text size="sm" color="gray">
-               {item.artist}
-              </Text>
-              <Text size="sm" color="blue">
-               {item.episodesCount}
-              </Text>
-            </Box>
-          </Box>
-        )}
-        keyExtractor={(item) => String(item.podcastName)}
-      />
+      {error ? (
+        <Box f={1}>
+          <Text color="red">{error.message}</Text>
+        </Box>
+      ) : (
+        <FlatList<SearchQuery_search>
+          keyboardShouldPersistTaps="never"
+          contentContainerStyle={styles.listContentContainer}
+          data={data?.search ?? []}
+          ListHeaderComponent={
+            <>
+              {loading && (
+                <Box f={1} h={300} center>
+                  <ActivityIndicator
+                    size="large"
+                    color="blue"
+                  ></ActivityIndicator>
+                </Box>
+              )}
+            </>
+          }
+          ListEmptyComponent={
+            <>
+              {!loading && (
+               <SearchEmpty />
+              )}
+            </>
+          }
+          renderItem={({ item }) => (
+           <SearchTile item={item}  />
+          )}
+          keyExtractor={(item) => String(item.feedUrl)}
+        />
+      )}
     </Box>
   );
 };
@@ -67,12 +93,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontSize: 15,
   },
-  img: {
-    flex:1,
-    borderRadius:10
-  },
-  list: {
-    minHeight: "100%",
+  listContentContainer: {
+    //minHeight: "100%",
+    paddingBottom: 90,
   },
 });
 
