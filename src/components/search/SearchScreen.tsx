@@ -4,7 +4,6 @@ import {
   FlatList,
   StyleSheet,
   TextInput,
-  ActivityIndicator,
 } from "react-native";
 import { useLazyQuery } from "@apollo/client";
 import {
@@ -15,6 +14,7 @@ import {
 import searchQuery from "../../graphql/query/searchQuery";
 import SearchEmpty from "./SearchEmpty"
 import SearchTile from "./SearchTile";
+import SearchLoading from './SearchLoading';
 
 
 
@@ -58,12 +58,7 @@ const SearchScreen = () => {
           ListHeaderComponent={
             <>
               {loading && (
-                <Box f={1} h={300} center>
-                  <ActivityIndicator
-                    size="large"
-                    color="blue"
-                  ></ActivityIndicator>
-                </Box>
+               <SearchLoading />
               )}
             </>
           }

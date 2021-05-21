@@ -6,6 +6,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import SearchScreen from "../components/search/SearchScreen";
 import LibraryScreen from "../components/library/LibraryScreen";
 import MaterialCommunityIcons from "react-native-vector-icons/Ionicons";
+import PodcastDetailScreen from "../components/podcastDetails/PodcastDetailScreen";
 
 const ListenNowStack = createStackNavigator();
 
@@ -13,9 +14,6 @@ const ListenNowStackNavigator = () => {
   return (
     <ListenNowStack.Navigator>
       <ListenNowStack.Screen
-        options={{
-          title: "Listen Now"
-        }}
         name="ListenNow"
         component={ListenNowScreen}
       />
@@ -27,13 +25,19 @@ const SearchStack = createStackNavigator();
 
 const SearchStackNavigator = () => {
   return (
-    <SearchStack.Navigator>
+    <SearchStack.Navigator screenOptions={{
+      headerTintColor:'#0BB5FF'
+    }}>
       <SearchStack.Screen
-        options={{
-          title: "Search",
-        }}
         name="Search"
         component={SearchScreen}
+      />
+      <SearchStack.Screen
+        name="PodcastDetails"
+        component={PodcastDetailScreen}
+        options = {
+          {headerTitle:''}
+        }
       />
     </SearchStack.Navigator>
   );
@@ -45,9 +49,6 @@ const LibraryStackNavigator = () => {
   return (
     <LibraryStack.Navigator>
       <LibraryStack.Screen
-        options={{
-          title: "Library Screen",
-        }}
         name="LibraryScreen"
         component={LibraryScreen}
       />
