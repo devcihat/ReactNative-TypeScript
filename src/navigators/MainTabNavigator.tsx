@@ -30,7 +30,7 @@ const SearchStackNavigator = () => {
     <SearchStack.Navigator>
       <SearchStack.Screen
         options={{
-          title: "Listen Now",
+          title: "Search",
         }}
         name="Search"
         component={SearchScreen}
